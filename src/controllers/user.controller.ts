@@ -1,8 +1,13 @@
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {Request, Response, RestBindings, api, operation, param, requestBody} from '@loopback/rest';
+import {v4 as uuidv4} from 'uuid';
+import {CONFIG} from '../config';
+import {SvcConnector} from '../connector/svc.connector';
+import {Balance} from '../models';
 import {User} from '../models/user.model';
 import {UserRepository} from '../repositories';
+
 
 
 /**
@@ -157,6 +162,15 @@ export class UserController {
     if (sameName) return this.response.status(400).send(this.errorRes(400, 'Это имя пользователя уже занято!'))
 
     const newUser = await this.userRepo.create(user);
+    let balance = new SvcConnector(CONFIG.balance.host, 60000, CONFIG.trace);
+    let balanceReq = new Balance();
+    if (!newUser.id) return this.response.status(400).send(this.errorRes(400, 'Неудача при создании пользователя!'))
+    balanceReq.user_id = newUser.id;
+    balanceReq.balance = 0;
+    balanceReq.account = uuidv4();
+
+    let balanceRes = await balance.postReq(balanceReq);
+    console.log(balanceRes);
 
     console.log('User ' + user.username + ' created. ID: ' + newUser.id);
     return this.response.status(200).send(newUser);
