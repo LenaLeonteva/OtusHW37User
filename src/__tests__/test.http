@@ -1,0 +1,94 @@
+###
+GET http://127.0.0.1:3000/ping
+
+###
+POST http://127.0.0.1:3008/user
+Content-Type: application/json
+
+{
+  "username": "tom",
+  "firstName": "Tom",
+  "lastName": "Cat",
+  "email": "bestcat@meow.com",
+  "phone": "+71002003040"
+}
+
+###
+GET http://127.0.0.1:3000/user/10
+
+###
+GET http://127.0.0.1:3000/user/2
+X-UserId: 2
+
+###
+PUT http://127.0.0.1:3000/user/100
+
+{
+  "username": "j5891",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "bestjohn@doe.com",
+  "phone": "+71002003040"
+}
+
+###
+PUT http://127.0.0.1:3000/user/2
+Content-Type: application/json
+
+{
+  "firstName": "Tom",
+  "lastName": "Cat",
+  "phone": "+71002003040"
+}
+
+###
+PUT http://127.0.0.1:3000/user/2
+Content-Type: application/json
+X-UserId: 2
+
+{
+  "firstName": "Tom",
+  "lastName": "Cat",
+  "phone": "+71002003040"
+}
+
+###
+PUT http://127.0.0.1:3000/user/me
+Content-Type: application/json
+X-UserId: 1
+
+{
+  "firstName": "Alice",
+  "lastName": "Cat",
+  "phone": "+71002003040"
+}
+
+###
+DELETE http://127.0.0.1:3000/user/5
+
+###
+GET http://172.26.239.206:80/ping
+
+###
+POST http://172.26.239.206:80/user
+Content-Type: application/json
+
+{
+  "username": "pups",
+  "firstName": "lyalya",
+  "lastName": "Mimi",
+  "email": "mimi@pups.com",
+  "phone": "+7100200300"
+}
+
+###
+POST http://10.106.20.255:80/user
+Content-Type: application/json
+
+{
+  "username": "cat",
+  "firstName": "hello",
+  "lastName": "kitty",
+  "email": "hello@pups.com",
+  "phone": "+7100200305"
+}
