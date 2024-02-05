@@ -10,6 +10,8 @@ import {
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
+import {HealthComponent} from '@loopback/health';
+
 
 export {ApplicationConfig};
 
@@ -29,6 +31,7 @@ export class UserManagementApplication extends BootMixin(
       openApiSpec: true,
     });
     this.component(MetricsComponent);
+    this.component(HealthComponent);
 
     // Customize @loopback/rest-explorer configuration here
     this.configure(RestExplorerBindings.COMPONENT).to({

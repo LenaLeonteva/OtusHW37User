@@ -45,14 +45,18 @@
     "!*/__tests__"
   ],
   "dependencies": {
+    "@loopback/authentication": "^10.1.5",
+    "@loopback/authentication-jwt": "^0.14.5",
     "@loopback/boot": "^6.1.2",
     "@loopback/core": "^5.1.2",
+    "@loopback/health": "^0.13.5",
     "@loopback/logging": "^0.11.5",
-    "@loopback/metrics": "^0.13.3",
+    "@loopback/metrics": "^0.13.5",
     "@loopback/repository": "^6.1.2",
     "@loopback/rest": "^13.1.2",
     "@loopback/rest-explorer": "^6.1.2",
     "@loopback/service-proxy": "^6.1.2",
+    "cookie": "^0.6.0",
     "loopback-connector-openapi": "^6.2.0",
     "loopback-connector-postgresql": "^5.5.2",
     "tslib": "^2.0.0",
@@ -61,6 +65,7 @@
   "devDependencies": {
     "@loopback/build": "^10.1.2",
     "@loopback/testlab": "^6.1.2",
+    "@types/cookie": "^0.6.0",
     "@types/node": "^16.18.40",
     "@types/uuid": "^9.0.8",
     "source-map-support": "^0.5.21",

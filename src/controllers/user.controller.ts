@@ -5,8 +5,8 @@ import {v4 as uuidv4} from 'uuid';
 import {CONFIG} from '../config';
 import {SvcConnector} from '../connector/svc.connector';
 import {Balance} from '../models';
-import {User} from '../models/user.model';
-import {UserRepository} from '../repositories';
+import {Users} from '../models/users.model';
+import {UsersRepository} from '../repositories/users.repository';
 
 
 
@@ -83,7 +83,7 @@ import {UserRepository} from '../repositories';
 })
 export class UserController {
   constructor(
-    @repository(UserRepository) private userRepo: UserRepository,
+    @repository(UsersRepository) private userRepo: UsersRepository,
     @inject(RestBindings.Http.RESPONSE) private response: Response,
     @inject(RestBindings.Http.REQUEST) private request: Request
   ) { }
@@ -150,7 +150,7 @@ export class UserController {
     },
     description: 'Created user object',
     required: true,
-  }) user: User): Promise<any | undefined> {
+  }) user: Users): Promise<any | undefined> {
 
     const filter = {
       where: {
@@ -232,7 +232,7 @@ user
       type: 'integer',
       format: 'int64',
     },
-  }) userId: number): Promise<User | any> {
+  }) userId: number): Promise<Users | any> {
     console.log("GET USER");
     let id = this.request.get('X-UserId');
     if (!id) return this.response.status(401).send(this.errorRes(401, "Please go to login and provide Login/Password"));
@@ -390,7 +390,7 @@ user
     },
     description: 'Created user object',
     required: true,
-  }) newData: User) {
+  }) newData: Users) {
     console.log("PUT USER");
     let id = this.request.get('X-UserId');
     if (!id) return this.response.status(401).send(this.errorRes(401, "Please go to login and provide Login/Password"));
@@ -473,7 +473,7 @@ user
     },
     description: 'Created user object',
     required: true,
-  }) newData: User) {
+  }) newData: Users) {
     console.log("UPDATE ME");
     //console.log(newData)
     let id = this.request.get('X-UserId');
