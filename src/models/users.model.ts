@@ -78,6 +78,16 @@ export class Users extends Entity {
   })
   phone?: string;
 
+  /**
+   *
+   */
+  @property({
+
+    type: 'boolean',
+
+  })
+  isAdmin?: boolean;
+
 }
 
 export interface UsersRelations {

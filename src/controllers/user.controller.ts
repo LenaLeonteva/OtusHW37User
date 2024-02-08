@@ -1,10 +1,6 @@
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {Request, Response, RestBindings, api, operation, param, requestBody} from '@loopback/rest';
-import {v4 as uuidv4} from 'uuid';
-import {CONFIG} from '../config';
-import {SvcConnector} from '../connector/svc.connector';
-import {Balance} from '../models';
 import {Users} from '../models/users.model';
 import {UsersRepository} from '../repositories/users.repository';
 
@@ -43,6 +39,9 @@ import {UsersRepository} from '../repositories/users.repository';
           phone: {
             type: 'string',
           },
+          isAdmin: {
+            type: 'boolean',
+          }
         },
       },
       Error: {
@@ -87,94 +86,94 @@ export class UserController {
     @inject(RestBindings.Http.RESPONSE) private response: Response,
     @inject(RestBindings.Http.REQUEST) private request: Request
   ) { }
-  /**
-   * This can only be done by the logged in user.
-   *
-   * @param _requestBody Created user object
-   */
-  @operation('post', '/user', {
-    tags: [
-      'user',
-    ],
-    summary: 'Create user',
-    description: 'This can only be done by the logged in user.',
-    operationId: 'createUser',
-    responses: {
-      default: {
-        description: 'successful operation',
-      },
-    },
-    requestBody: {
-      content: {
-        'application/json': {
-          schema: {
-            $ref: '#/components/schemas/Users',
-          },
-          examples: {
-            'sample-user': {
-              summary: 'Example',
-              value: {
-                username: 'johndoe589',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'bestjohn@doe.com',
-                phone: '+71002003040',
-              },
-            },
-          },
-        },
-      },
-      description: 'Created user object',
-      required: true,
-    },
-  })
-  async createUser(@requestBody({
-    content: {
-      'application/json': {
-        schema: {
-          $ref: '#/components/schemas/Users',
-        },
-        examples: {
-          'sample-user': {
-            summary: 'Example',
-            value: {
-              username: 'johndoe589',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'bestjohn@doe.com',
-              phone: '+71002003040',
-            },
-          },
-        },
-      },
-    },
-    description: 'Created user object',
-    required: true,
-  }) user: Users): Promise<any | undefined> {
+  // /**
+  //  * This can only be done by the logged in user.
+  //  *
+  //  * @param _requestBody Created user object
+  //  */
+  // @operation('post', '/user', {
+  //   tags: [
+  //     'user',
+  //   ],
+  //   summary: 'Create user',
+  //   description: 'This can only be done by the logged in user.',
+  //   operationId: 'createUser',
+  //   responses: {
+  //     default: {
+  //       description: 'successful operation',
+  //     },
+  //   },
+  //   requestBody: {
+  //     content: {
+  //       'application/json': {
+  //         schema: {
+  //           $ref: '#/components/schemas/Users',
+  //         },
+  //         examples: {
+  //           'sample-user': {
+  //             summary: 'Example',
+  //             value: {
+  //               username: 'johndoe589',
+  //               firstName: 'John',
+  //               lastName: 'Doe',
+  //               email: 'bestjohn@doe.com',
+  //               phone: '+71002003040',
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //     description: 'Created user object',
+  //     required: true,
+  //   },
+  // })
+  // async createUser(@requestBody({
+  //   content: {
+  //     'application/json': {
+  //       schema: {
+  //         $ref: '#/components/schemas/Users',
+  //       },
+  //       examples: {
+  //         'sample-user': {
+  //           summary: 'Example',
+  //           value: {
+  //             username: 'johndoe589',
+  //             firstName: 'John',
+  //             lastName: 'Doe',
+  //             email: 'bestjohn@doe.com',
+  //             phone: '+71002003040',
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  //   description: 'Created user object',
+  //   required: true,
+  // }) user: Users): Promise<any | undefined> {
 
-    const filter = {
-      where: {
-        username: user.username,
-      }
-    };
+  //   const filter = {
+  //     where: {
+  //       username: user.username,
+  //     }
+  //   };
 
-    const sameName = await this.userRepo.findOne(filter)
-    if (sameName) return this.response.status(400).send(this.errorRes(400, 'Это имя пользователя уже занято!'))
+  //   const sameName = await this.userRepo.findOne(filter)
+  //   if (sameName) return this.response.status(400).send(this.errorRes(400, 'Это имя пользователя уже занято!'))
 
-    const newUser = await this.userRepo.create(user);
-    let balance = new SvcConnector(CONFIG.balance.host, 60000, CONFIG.trace);
-    let balanceReq = new Balance();
-    if (!newUser.id) return this.response.status(400).send(this.errorRes(400, 'Неудача при создании пользователя!'))
-    balanceReq.user_id = newUser.id;
-    balanceReq.balance = 0;
-    balanceReq.account = uuidv4();
+  //   const newUser = await this.userRepo.create(user);
+  //   let balance = new SvcConnector(CONFIG.balance.host, 60000, CONFIG.trace);
+  //   let balanceReq = new Balance();
+  //   if (!newUser.id) return this.response.status(400).send(this.errorRes(400, 'Неудача при создании пользователя!'))
+  //   balanceReq.user_id = newUser.id;
+  //   balanceReq.balance = 0;
+  //   balanceReq.account = uuidv4();
 
-    let balanceRes = await balance.postReq(balanceReq);
-    console.log(balanceRes);
+  //   let balanceRes = await balance.postReq(balanceReq);
+  //   console.log(balanceRes);
 
-    console.log('User ' + user.username + ' created. ID: ' + newUser.id);
-    return this.response.status(200).send(newUser);
-  }
+  //   console.log('User ' + user.username + ' created. ID: ' + newUser.id);
+  //   return this.response.status(200).send(newUser);
+  // }
   /**
    * Returns a user based on a single ID, if the user does not have access to the
 user

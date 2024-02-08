@@ -3,32 +3,35 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {authenticate, TokenService} from '@loopback/authentication';
+import {authenticate} from '@loopback/authentication';
 import {
   Credentials,
   MyUserService,
-  TokenServiceBindings,
+  //TokenServiceBindings,
   User,
   UserRepository,
-  UserServiceBindings,
+  UserServiceBindings
 } from '@loopback/authentication-jwt';
 import {inject} from '@loopback/core';
 import {model, property, repository} from '@loopback/repository';
 import {
+  Request,
+  Response,
+  RestBindings,
+  SchemaObject,
   get,
   getModelSchemaRef,
   post,
-  Request,
-  requestBody,
-  Response,
-  RestBindings,
-  SchemaObject
+  requestBody
 } from '@loopback/rest';
-import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
+import {SecurityBindings, UserProfile, securityId} from '@loopback/security';
 import {genSalt, hash} from 'bcryptjs';
 import {parse} from 'cookie';
 import _ from 'lodash';
 import {v4 as uuidv4} from 'uuid';
+import {CONFIG} from '../config';
+import {SvcConnector} from '../connector/svc.connector';
+import {Balance} from '../models';
 import {Users} from '../models/users.model';
 import {UsersRepository} from '../repositories/users.repository';
 
@@ -65,10 +68,10 @@ export const CredentialsRequestBody = {
   },
 };
 
-export class UserController {
+export class AuthController {
   constructor(
-    @inject(TokenServiceBindings.TOKEN_SERVICE)
-    public jwtService: TokenService,
+    // @inject(TokenServiceBindings.TOKEN_SERVICE)
+    // public jwtService: TokenService,
     @inject(UserServiceBindings.USER_SERVICE)
     public userService: MyUserService,
     @inject(SecurityBindings.USER, {optional: true})
@@ -131,6 +134,7 @@ export class UserController {
     this.response.set('X-UserId', userID.id?.toString());
     this.response.set('X-User', userID.username);
     this.response.set('X-Email', userID.email);
+    this.response.set('X-Admin', (userID.isAdmin==true).toString());
     this.response.cookie("session_id", sessionID);
     console.log("LOGIN END: ", userID.username);
     return;
@@ -162,9 +166,10 @@ export class UserController {
     this.response.set('X-UserId', userID.id?.toString());
     this.response.set('X-User', userID.username);
     this.response.set('X-Email', userID.email);
+    this.response.set('X-Admin', (userID.isAdmin ?? false).toString());
     console.log("AUTH: ", userID.username);
     console.log(this.response);
-    return this.response.status(200).send();
+    return this.response.status(200).send(userID);
   }
 
   @post('/logout', {
@@ -283,8 +288,20 @@ export class UserController {
     dataUser.firstName = "";
     dataUser.lastName = "";
     dataUser.phone = "";
-    await this.dataUserRepo.create(dataUser);
-    console.log("SIGNUP: ", newUserRequest.username);
+    dataUser.isAdmin = false;
+    const newUser = await this.dataUserRepo.create(dataUser);
+    let balance = new SvcConnector(CONFIG.balance.host, 60000, CONFIG.trace);
+    let balanceReq = new Balance();
+    if (!newUser.id) return this.response.status(400).send(this.errorRes(400, 'Неудача при создании пользователя!'))
+    balanceReq.user_id = newUser.id;
+    balanceReq.balance = 0;
+    balanceReq.account = uuidv4();
+
+    let balanceRes = await balance.postReq(balanceReq);
+    console.log(balanceRes);
+
+    console.log('User ' + dataUser.username + ' created. ID: ' + newUser.id);
+    //console.log("SIGNUP: ", newUserRequest.username);
     return savedUser;
   }
 

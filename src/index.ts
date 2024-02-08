@@ -1,4 +1,5 @@
 import {ApplicationConfig, UserManagementApplication} from './application';
+import {CONFIG} from './config';
 
 export * from './application';
 
@@ -20,7 +21,7 @@ if (require.main === module) {
   // Run the application
   const config = {
     rest: {
-      port: +(process.env.PORT ?? 3000),
+      port: +(process.env.PORT ?? CONFIG.port),
       host: process.env.HOST,
       // The `gracePeriodForClose` provides a graceful close for http/https
       // servers with keep-alive clients. The default value is `Infinity`

@@ -1,88 +1,88 @@
-import {Entity, model, property} from '@loopback/repository';
+// import {Entity, model, property} from '@loopback/repository';
 
-/**
- * The model class is generated from OpenAPI schema - Users
- * Users
- */
-@model({name: 'Users'})
-export class User extends Entity {
-  constructor(data?: Partial<User>) {
-    super(data);
-    if (data != null && typeof data === 'object') {
-      Object.assign(this, data);
-    }
-  }
+// /**
+//  * The model class is generated from OpenAPI schema - Users
+//  * Users
+//  */
+// @model({name: 'Users'})
+// export class User extends Entity {
+//   constructor(data?: Partial<User>) {
+//     super(data);
+//     if (data != null && typeof data === 'object') {
+//       Object.assign(this, data);
+//     }
+//   }
 
-  /**
-   *
-   */
-  @property({
+//   /**
+//    *
+//    */
+//   @property({
 
-    id: true,
-    generated: true,
-    type: 'number'
+//     id: true,
+//     generated: true,
+//     type: 'number'
 
-  })
-  id?: number;
+//   })
+//   id?: number;
 
-  /**
-   *
-   */
-  @property({
+//   /**
+//    *
+//    */
+//   @property({
 
-    type: 'string',
-    maxLength: 256,
+//     type: 'string',
+//     maxLength: 256,
 
-  })
-  username?: string;
+//   })
+//   username?: string;
 
-  /**
-   *
-   */
-  @property({
+//   /**
+//    *
+//    */
+//   @property({
 
-    type: 'string',
+//     type: 'string',
 
-  })
-  firstName?: string;
+//   })
+//   firstName?: string;
 
-  /**
-   *
-   */
-  @property({
+//   /**
+//    *
+//    */
+//   @property({
 
-    type: 'string',
+//     type: 'string',
 
-  })
-  lastName?: string;
+//   })
+//   lastName?: string;
 
-  /**
-   *
-   */
-  @property({
+//   /**
+//    *
+//    */
+//   @property({
 
-    type: 'string',
-    format: 'email',
+//     type: 'string',
+//     format: 'email',
 
-  })
-  email?: string;
+//   })
+//   email?: string;
 
-  /**
-   *
-   */
-  @property({
+//   /**
+//    *
+//    */
+//   @property({
 
-    type: 'string',
+//     type: 'string',
 
-  })
-  phone?: string;
+//   })
+//   phone?: string;
 
-}
+// }
 
-export interface UserRelations {
-  // describe navigational properties here
-}
+// export interface UserRelations {
+//   // describe navigational properties here
+// }
 
-export type UserWithRelations = User & UserRelations;
+// export type UserWithRelations = User & UserRelations;
 
 

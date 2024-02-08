@@ -1,0 +1,88 @@
+#@host=http://arch.homework
+@host=http://127.0.0.1:3008
+
+### reister
+POST {{host}}/signup
+Content-Type: application/json
+
+{
+  "username": "marsik2",
+  "password": "kotkotkot",
+  "email": "kot2@kot.kot"
+}
+
+### reister
+POST {{host}}/signup
+Content-Type: application/json
+
+{
+  "username": "marsik4",
+  "password": "kotkotkot5",
+  "email": "kot4@kot.kot"
+}
+
+### reister
+POST {{host}}/signup
+Content-Type: application/json
+
+{
+  "username": "yosik2",
+  "password": "kotikkotik",
+  "email": "yosik2@kot.kot"
+}
+
+### reister
+POST {{host}}/signup
+Content-Type: application/json
+
+{
+  "username": "alisa2",
+  "password": "koshkakoshka",
+  "email": "koshka2@kot.kot"
+}
+
+### login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  //"username": "marsik2",
+  "email": "kot2@kot.kot",
+  "password": "kotkotkot"
+}
+
+### login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  //"username": "yosik2",
+  "email": "yosik2@kot.kot",
+  "password": "kotikkotik"
+}
+
+### login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  //"username": "alisa",
+  "password": "koshkakoshka",
+  "email": "koshka2@kot.kot"
+}
+
+
+### auth
+POST {{host}}/auth
+Set-Cookie: session_id=de4cd6c3-1fd6-4ace-97c1-e67e14651869; Path=/
+
+### auth
+POST {{host}}/auth
+
+###
+POST {{host}}/logout
+Set-Cookie: session_id=c3dac7b7-b3ba-45ed-abce-5c22c6e11963; Path=/
+
+
+###signin
+GET http://127.0.0.1:3000/signin
