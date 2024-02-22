@@ -134,7 +134,7 @@ export class AuthController {
     this.response.set('X-UserId', userID.id?.toString());
     this.response.set('X-User', userID.username);
     this.response.set('X-Email', userID.email);
-    this.response.set('X-Admin', (userID.isAdmin==true).toString());
+    this.response.set('X-Admin', (userID.isAdmin == true).toString());
     this.response.cookie("session_id", sessionID);
     console.log("LOGIN END: ", userID.username);
     return;
@@ -150,10 +150,13 @@ export class AuthController {
   async auth(): Promise<any> {
     console.log("AUTH START");
     let cookies = this.request.get("Set-cookie")
-    if (!cookies) return this.response.status(403).send(this.errorRes(403, "Please go to login and provide Login/Password"))
+    if (!cookies) cookies = this.request.get("Cookie")
+    console.log('cookies:', cookies);
+    if (!cookies) return this.response.status(403).send(this.errorRes(403, "Please go to login and provide Login/Password (no cookie)"))
     let objCookies = parse(cookies[0])
+    console.log('obj with cookies:', objCookies);
     let sessionID = objCookies.session_id
-    if (!SESSIONS.has(sessionID)) return this.response.status(403).send(this.errorRes(403, "Please go to login and provide Login/Password"))
+    if (!SESSIONS.has(sessionID)) return this.response.status(403).send(this.errorRes(403, "Please go to login and provide Login/Password (no session_id)"))
     let userData = SESSIONS.get(sessionID);
 
     const filter = {
@@ -169,7 +172,8 @@ export class AuthController {
     this.response.set('X-Admin', (userID.isAdmin ?? false).toString());
     console.log("AUTH: ", userID.username);
     console.log(this.response);
-    return this.response.status(200).send(userID);
+    this.response.status(200);
+    return {user_id: userID};
   }
 
   @post('/logout', {

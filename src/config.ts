@@ -18,5 +18,5 @@ export const CONFIG = {
         host: process.env.BALANCE_HOST ?? "http://127.0.0.1:3001/balance/add",
     },
     trace: true,
-    port: 3008
+    port: 3000
 }

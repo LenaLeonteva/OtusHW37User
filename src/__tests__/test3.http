@@ -1,5 +1,5 @@
 #@host=http://arch.homework
-@host=http://127.0.0.1:3008
+@host=http://127.0.0.1:3000
 
 ### reister
 POST {{host}}/signup
@@ -41,7 +41,7 @@ Content-Type: application/json
   "email": "koshka2@kot.kot"
 }
 
-### login
+### login 
 POST {{host}}/login
 Content-Type: application/json
 
@@ -74,7 +74,15 @@ Content-Type: application/json
 
 ### auth
 POST {{host}}/auth
-Set-Cookie: session_id=de4cd6c3-1fd6-4ace-97c1-e67e14651869; Path=/
+Set-Cookie: session_id=7397217f-ecd8-4a5e-8d89-e2b2a3b62d69; Path=/
+
+
+### auth
+POST {{host}}/auth
+Cookie: session_id=54b0c751-9078-4cfc-a783-af7908a9dc4c; Path=/
+
+
+
 
 ### auth
 POST {{host}}/auth
