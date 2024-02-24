@@ -149,7 +149,7 @@ export class AuthController {
   })
   async auth(): Promise<any> {
     console.log("AUTH START");
-    let cookies = this.request.get("Set-cookie")
+    let cookies = this.request.get("Set-cookie");
     if (!cookies) cookies = this.request.get("Cookie")
     console.log('cookies:', cookies);
     if (!cookies) return this.response.status(403).send(this.errorRes(403, "Please go to login and provide Login/Password (no cookie)"))
@@ -188,7 +188,8 @@ export class AuthController {
     let cookies = this.request.get("Set-cookie")
     if (!cookies) return this.response.status(200).send();
     let objCookies = parse(cookies[0])
-    let sessionID = objCookies.session_id
+    let sessionID = objCookies.session_id;
+    this.response.cookie("session_id", "");
     if (!SESSIONS.has(sessionID)) return this.response.status(200).send();
     SESSIONS.delete(sessionID);
     console.log("LOGAUTH END");
